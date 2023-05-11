@@ -3,13 +3,33 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { createBrowserRouter, Route
+, createRoutesFromElements, 
+RouterProvider,
+BrowserRouter} from 'react-router-dom';
+import { Login } from './components/Login';
+import 'react-toastify/dist/ReactToastify.css';
+import { OfficialLogin } from './components/OfficialLogin';
+
+
+
+
+//const router= createBrowserRouter([{<Route path='/' element={<Login/>}/>, <Route path='/official' element={<OfficialLogin/>} />}])
+
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
+    <BrowserRouter>
     <App />
+    </BrowserRouter>
+    
+    
+    {/* <RouterProvider router={router}/> */}
+    
   </React.StrictMode>
 );
 
