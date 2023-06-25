@@ -18,7 +18,7 @@ type Props = {
   children: ReactNode;
 };
 
-export const Layout = ({ children }: Props) => {
+export const VoterLayout = ({ children }: Props) => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
@@ -53,7 +53,7 @@ export const Layout = ({ children }: Props) => {
             <Nav variant="pills" className="ms-2 mt-lg-5 mt-sm-3 pt-lg-5 flex-column">
               <Nav.Item className="w-100 mb-4 ">
                 <NavLink
-                  to="/official/dashboard"
+                  to="/voters/dashboard"
                   // className="text-white text-decoration-none"
                   className={({ isActive }) =>
                     isActive
@@ -72,7 +72,7 @@ export const Layout = ({ children }: Props) => {
 
               <Nav.Item className="w-100 mb-4 ">
                 <NavLink
-                  to="/official/candidate"
+                  to="/voters/profile"
                   //className="text-white text-decoration-none"
                   className={({ isActive }) =>
                     isActive
@@ -84,11 +84,11 @@ export const Layout = ({ children }: Props) => {
                     <i className="me-2 bi bi-person-fill"></i>
                   </span>
                   <span style={{ fontSize: "20px", fontWeight: "bold" }}>
-                    Candidates
+                    My profile
                   </span>
                 </NavLink>
               </Nav.Item>
-              <Nav.Item className="w-100 mb-4 ">
+              {/* <Nav.Item className="w-100 mb-4 ">
                 <NavLink
                   to="/official/election"
                   //className="text-white text-decoration-none"
@@ -102,13 +102,31 @@ export const Layout = ({ children }: Props) => {
                     <i className="me-2 bi bi-person-badge"></i>
                   </span>
                   <span style={{ fontSize: "20px", fontWeight: "bold" }}>
-                    Election
+                    My Profile
+                  </span>
+                </NavLink>
+              </Nav.Item> */}
+              <Nav.Item className="w-100 mb-4 ">
+                <NavLink
+                  to="/voters/election"
+                  // className="text-white text-decoration-none"
+                  className={({ isActive }) =>
+                    isActive
+                      ? "text-white nav-link active"
+                      : "text-white nav-link"
+                  }
+                >
+                  <span className="">
+                    <i className="me-2 bi bi-box-seam"></i>
+                  </span>
+                  <span style={{ fontSize: "20px", fontWeight: "bold" }}>
+                    Vote
                   </span>
                 </NavLink>
               </Nav.Item>
               <Nav.Item className="w-100 mb-4 ">
                 <NavLink
-                  to="/official/result"
+                  to="/voters/result"
                   // className="text-white text-decoration-none"
                   className={({ isActive }) =>
                     isActive
@@ -120,13 +138,13 @@ export const Layout = ({ children }: Props) => {
                     <i className="me-2 bi bi-file-earmark-text"></i>
                   </span>
                   <span style={{ fontSize: "20px", fontWeight: "bold" }}>
-                    Results
+                    Result
                   </span>
                 </NavLink>
               </Nav.Item>
               <Nav.Item className="w-100 mb-4 ">
                 <NavLink
-                  to="/official/settings"
+                  to="/voters/settings"
                   // className="text-white text-decoration-none"
                   className={({ isActive }) =>
                     isActive

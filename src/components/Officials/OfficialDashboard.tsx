@@ -7,22 +7,38 @@ type Profile = {
   lastName: string;
   firstName: string;
   otherName: string;
-  title: string;
+  email: string;
+  role: string;
+  telephoneNo: string;
 };
+
+type Count= {
+  voterTotal: number,
+  candidateTotal: number,
+  electionTotal: number,
+}
 export const OfficialDashboard = () => {
   const [profile, setProfile] = useState<null | Profile>(null);
-  const id = JSON.parse(window.localStorage.getItem("ID") as string);
-  const token = JSON.parse(window.localStorage.getItem("Token") as string);
-  console.log(token);
+  const [count, setCount] = useState<null | Count>(null);
 
   const getUser = async () => {
     try {
-      const response = await API.get(`officials/profile/${id}`);
+      const response = await API.get(`officials/profile`);
       console.log(response);
       setProfile(response.data);
     } catch (err) {}
   };
-  const fullName = profile?.title + ". " + profile?.lastName;
+
+  const getCounts = async () => {
+    try {
+      const response = await API.get(`elections/counts`);
+      console.log(response);
+      setCount(response.data);
+    } catch (err) {}
+  };
+
+  
+  const fullName = "Mr. " + profile?.lastName || "";
 
   const greeting = (name: string) => {
     const currentDate = new Date();
@@ -48,6 +64,7 @@ export const OfficialDashboard = () => {
 
   useEffect(() => {
     getUser();
+    getCounts()
   }, []);
 
   // const fetchResponse=()=>{
@@ -74,24 +91,7 @@ export const OfficialDashboard = () => {
       </div>
 
       <Container className=" h-75 ps-5 pe-5  ">
-        <Row className=" align-items-center  h-100">
-          <Col className=" ps-4 pt-4 h-50" lg={4}>
-            <div
-              className=" border-3 w-sm-75 "
-              style={{
-                width: "95%",
-                height: "85%",
-                borderRadius: "10%",
-                backgroundColor: "pink",
-              }}
-            >
-              <div className="align-items-center h-100 justify-content-center d-flex ">
-                {" "}
-                <h2 style={{ fontWeight: "bold" }}>Officials: 2005</h2>
-              </div>
-            </div>
-          </Col>
-
+        <Row className=" align-items-center justify-content-center  h-100">
           <Col className="  ps-4 pt-4  h-50" lg={4}>
             <div
               className="  "
@@ -104,7 +104,7 @@ export const OfficialDashboard = () => {
             >
               <div className="align-items-center h-100 justify-content-center d-flex ">
                 {" "}
-                <h2 style={{ fontWeight: "bold" }}>Candidates: 3</h2>
+                <h2 style={{ fontWeight: "bold" }}>Candidates: {count?.candidateTotal || ""}</h2>
               </div>
             </div>
           </Col>
@@ -121,7 +121,24 @@ export const OfficialDashboard = () => {
             >
               <div className="align-items-center h-100 justify-content-center d-flex ">
                 {" "}
-                <h2 style={{ fontWeight: "bold" }}>Voters: 1000</h2>
+                <h2 style={{ fontWeight: "bold" }}>Voters: {count?.voterTotal || ""}</h2>
+              </div>
+            </div>
+          </Col>
+
+          <Col className=" ps-4 pt-4  h-50" lg={4}>
+            <div
+              className="  "
+              style={{
+                width: "95%",
+                height: "85%",
+                borderRadius: "10%",
+                backgroundColor: "pink",
+              }}
+            >
+              <div className="align-items-center h-100 justify-content-center d-flex ">
+                {" "}
+                <h2 style={{ fontWeight: "bold" }}>Elections: {count?.electionTotal || ""}</h2>
               </div>
             </div>
           </Col>

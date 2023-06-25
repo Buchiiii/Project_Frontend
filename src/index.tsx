@@ -9,7 +9,7 @@ RouterProvider,
 BrowserRouter} from 'react-router-dom';
 import { Login } from './components/Login';
 import 'react-toastify/dist/ReactToastify.css';
-import { OfficialLogin } from './components/OfficialLogin';
+import { OfficialLogin } from './components/Officials/OfficialLogin';
 
 
 
@@ -23,7 +23,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter >
     <App />
     </BrowserRouter>
     
