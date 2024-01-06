@@ -5,7 +5,7 @@ const token: string | null = JSON.parse(
 );
 
 export const API = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "https://concito.serveo.net/",
   headers: {
     "Content-Type": "application/json",
     Authorization: `Bearer ${token}`,

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { API } from "../../controller/api";
+import { greeting } from "../../utils/Greeting";
 
-type Profile = {
+interface IProfile {
   id: string;
   lastName: string;
   firstName: string;
@@ -12,14 +13,14 @@ type Profile = {
   telephoneNo: string;
 };
 
-type Count= {
+interface ICount{
   voterTotal: number,
   candidateTotal: number,
   electionTotal: number,
 }
 export const OfficialDashboard = () => {
-  const [profile, setProfile] = useState<null | Profile>(null);
-  const [count, setCount] = useState<null | Count>(null);
+  const [profile, setProfile] = useState<null | IProfile>(null);
+  const [count, setCount] = useState<null | ICount>(null);
 
   const getUser = async () => {
     try {
@@ -40,27 +41,9 @@ export const OfficialDashboard = () => {
   
   const fullName = "Mr. " + profile?.lastName || "";
 
-  const greeting = (name: string) => {
-    const currentDate = new Date();
-    const timestamp = currentDate.getHours();
-    let greeting = "hey";
+  
 
-    if (Number(timestamp) < 12 && Number(timestamp) >= 0) {
-      greeting = "Good morning, " + name;
-    }
 
-    if (Number(timestamp) >= 12 && Number(timestamp) < 16) {
-      greeting = "Good afternoon, " + name;
-    }
-
-    if (Number(timestamp) >= 16) {
-      greeting = "Good evening, " + name;
-    }
-
-    return greeting;
-  };
-
-  console.log(greeting("buchi"));
 
   useEffect(() => {
     getUser();

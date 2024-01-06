@@ -6,7 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { Form, Formik } from "formik";
 import { Row, Col, Container } from "react-bootstrap";
-import { Input } from "../../Fields/inputField";
+import { Input } from "../../components/inputField";
 
 type style = {
   labelstyle: React.CSSProperties;

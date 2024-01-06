@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { API } from "../../controller/api";
-import { Input } from "../../Fields/inputField";
+import { Input } from "../../components/inputField";
 import { AxiosError } from "axios";
 import { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";

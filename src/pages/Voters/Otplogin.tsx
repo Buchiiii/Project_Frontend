@@ -1,7 +1,7 @@
 import { Formik, Form } from "formik";
 
 import { Col, Container, Row } from "react-bootstrap";
-import { Input } from "../../Fields/inputField";
+import { Input } from "../../components/inputField";
 import * as Yup from "yup";
 import { API } from "../../controller/api";
 import image from "../images/E-voting.jpg";

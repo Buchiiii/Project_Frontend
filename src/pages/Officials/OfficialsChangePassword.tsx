@@ -3,7 +3,7 @@ import { Formik, Form } from "formik";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { Input } from "../../Fields/inputField";
+import { Input } from "../../components/inputField";
 import { API } from "../../controller/api";
 import * as Yup from "yup";
 

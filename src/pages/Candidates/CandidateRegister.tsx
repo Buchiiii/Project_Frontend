@@ -1,17 +1,18 @@
 import { AxiosError } from "axios";
-import { Field, Formik, Form } from "formik";
+import { Formik, Field, Form } from "formik";
+import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { Input } from "../../Fields/inputField";
+import { Input } from "../../components/inputField";
 import { API } from "../../controller/api";
 import * as Yup from "yup";
-import { useEffect, useState } from "react";
-import { encrypt, decrypt, compare } from "n-krypta";
-import CryptoJS from "crypto-js";
-import { encryptObject } from "../Encryption";
+import "react-toastify/dist/ReactToastify.css";
 
-const my_secret = "my-secret";
+type electionRole = {
+  id: string;
+  role: string;
+};
 
 type level = {
   id: string;
@@ -23,20 +24,25 @@ type department = {
   name: string;
 };
 
-export const VoterRegister = () => {
+type Election = {
+  id: string;
+  name: string;
+  course: string[];
+  level: string[];
+};
+
+export const CandidateRegister = () => {
   const navigate = useNavigate();
   const [level, setLevel] = useState<level[] | null>(null);
   const [department, setDepartment] = useState<department[] | null>(null);
+  const [searchParamDep, setSearchParamDep] = useState("");
+  const [searchParamlevel, setSearchParamlevel] = useState("");
+  const [election, setElection] = useState<Election[] | null>(null);
+  const [electionId, setElectionId] = useState("");
+  const [roles, setRoles] = useState<null | electionRole[]>(null);
 
   const date = new Date();
   const timeStamp = date.getTime();
-
-  const array: string[] = [];
-  if (department) {
-    department.forEach((element) => {
-      array.push(element.name);
-    });
-  }
 
   const initialValues = {
     lastName: "",
@@ -65,6 +71,8 @@ export const VoterRegister = () => {
     otherName: Yup.string().required("This field is required"),
     email: Yup.string().email().required("This field is required"),
     matricNo: Yup.string().required("This field is required"),
+    course: Yup.string().required("This field is required"),
+    level: Yup.string().required("This field is required"),
   });
 
   const getDepartment = async () => {
@@ -95,14 +103,34 @@ export const VoterRegister = () => {
     }
   };
 
+  
+
+  const getElection = async () => {
+    try {
+      const response = await API.get(
+        `elections/newcandidate/elections?course=${searchParamDep}&level=${searchParamlevel}`
+      );
+      setElection(response.data);
+      console.log(response);
+    } catch (err) {}
+  };
+
+  const getRoles = async () => {
+    try {
+      const response = await API.get(`elections/roles/${electionId}`);
+
+      setRoles(response.data);
+      console.log(response);
+    } catch (err) {}
+  };
+
   const submit = async (values: values) => {
     try {
-      const response = await API.post("voters/register", values);
+      const response = await API.post("candidate/register", values);
       console.log(response);
       toast.success(response.data.message);
-
       setTimeout(() => {
-        navigate("/voter");
+        navigate("/");
       }, 2000);
 
       //toast.success(response.data.message);
@@ -120,6 +148,18 @@ export const VoterRegister = () => {
     getDepartment();
     getLevel();
   }, []);
+
+  useEffect(() => {
+    if (searchParamDep !== "" && searchParamlevel !== "") {
+      getElection();
+    }
+  }, [searchParamDep, searchParamlevel]);
+
+  useEffect(() => {
+    if (electionId !== "") {
+      getRoles();
+    }
+  }, [electionId]);
   return (
     <div>
       <Container fluid style={{ height: "100vh" }}>
@@ -151,7 +191,9 @@ export const VoterRegister = () => {
                     </button>
                   </div>
                   <div className="text-center mb-4">
-                    <span style={{ fontSize: "20px" }}>Voter Registration</span>
+                    <span style={{ fontSize: "20px" }}>
+                       Candidate Registration
+                    </span>
                   </div>
 
                   <Formik
@@ -163,6 +205,26 @@ export const VoterRegister = () => {
                     }}
                   >
                     {(formikProps) => {
+                      const DepartmentOnChange = (
+                        e: React.ChangeEvent<HTMLSelectElement>
+                      ) => {
+                        setSearchParamDep(e.target.value);
+                        return formikProps.handleChange(e);
+                      };
+
+                      const LevelOnChange = (
+                        e: React.ChangeEvent<HTMLSelectElement>
+                      ) => {
+                        setSearchParamlevel(e.target.value);
+                        return formikProps.handleChange(e);
+                      };
+
+                      const ElectionOnChange = (
+                        e: React.ChangeEvent<HTMLSelectElement>
+                      ) => {
+                        setElectionId(e.target.value);
+                        return formikProps.handleChange(e);
+                      };
                       return (
                         <Form className="ps-2">
                           <Row>
@@ -211,6 +273,7 @@ export const VoterRegister = () => {
                                   className="form-select"
                                   as="select"
                                   name="course"
+                                  onChange={DepartmentOnChange}
                                 >
                                   <option defaultValue={"Select a level"}>
                                     Select a course
@@ -238,6 +301,7 @@ export const VoterRegister = () => {
                                   className="form-select"
                                   as="select"
                                   name="level"
+                                  onChange={LevelOnChange}
                                 >
                                   <option defaultValue={"Select a level"}>
                                     Select a level
@@ -248,6 +312,60 @@ export const VoterRegister = () => {
                                       value={element.name}
                                     >
                                       {element.name}
+                                    </option>
+                                  ))}
+                                </Field>
+                              </div>
+                            </Col>
+                          </Row>
+
+                          <Row>
+                            <Col>
+                              <div className="mb-3 ">
+                                <label className="form-label text-dark">
+                                  Election
+                                  <span className="text-danger ms-1">*</span>
+                                </label>
+
+                                <Field
+                                  className="form-select"
+                                  as="select"
+                                  name="election"
+                                  onChange={ElectionOnChange}
+                                >
+                                  <option defaultValue={"Select a level"}>
+                                    Select an election
+                                  </option>
+                                  {election?.map((element) => (
+                                    <option key={element.id} value={element.id}>
+                                      {element.name}
+                                    </option>
+                                  ))}
+                                </Field>
+                              </div>
+                            </Col>
+
+                            <Col>
+                              <div className="mb-3 ">
+                                <label className="form-label text-dark">
+                                  Role
+                                  <span className="text-danger ms-1">*</span>
+                                </label>
+
+                                <Field
+                                  className="form-select"
+                                  as="select"
+                                  name="role"
+                                >
+                                  <option defaultValue={"Select a level"}>
+                                    Select a role
+                                  </option>
+                                  {roles?.map((element) => (
+                                    <option
+                                      key={element.id}
+                                      value={element.role}
+                                    >
+                                      {element.role}
                                     </option>
                                   ))}
                                 </Field>

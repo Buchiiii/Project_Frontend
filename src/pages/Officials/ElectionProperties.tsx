@@ -12,7 +12,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { API } from "../../controller/api";
 import { Field, Form, Formik, FormikProps } from "formik";
-import { Input } from "../../Fields/inputField";
+import { Input } from "../../components/inputField";
 import * as Yup from "yup";
 import { AxiosError } from "axios";
 import { ToastContainer, toast } from "react-toastify";
