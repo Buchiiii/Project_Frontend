@@ -3,71 +3,28 @@ import { Col, Container, Row } from "react-bootstrap";
 import { API } from "../../services/controller/api";
 import { Link, useNavigate } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-
-type Candidate = {
-  id: string;
-  lastName: string;
-  firstName: string;
-  otherName: string;
-  email: string;
-  dateOfBirth: string;
-  course: string;
-  matricNo: string;
-  level: string;
-  registrationDate: string;
-};
-
-type Election = {
-  id: string;
-  name: string;
-  course: string;
-  level: string;
-  candidates: Candidate[];
-  // {
-  // 		id: string,
-  // 		lastName: string,
-  // 		firstName: string,
-  // 		otherName: string,
-  // 		email: string,
-  // 		dateOfBirth: string,
-  // 		course: string,
-  // 		matricNo: string,
-  // 		level: string,
-  // 		registrationDate: string;
-  // 	}
-};
+import Paginate from "../../components/Paginate";
+import { GetPaginatedElectionHook } from "../hooks/get-paginated-election-hook";
 
 export const OfficialChooseElectionForCandidate = () => {
-  const navigate = useNavigate();
-  const [election, setElection] = useState<null | Election[]>(null);
- 
   const limit = 4;
-
- 
-
-  const getPage = async (currentPage: number) => {
-    try {
-      const response = await API.get(
-        `elections?page=${currentPage}&limit=${limit}`
-      );
-      console.log(response.data.data);
-      return response.data.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { election, setElection, totalPages } = GetPaginatedElectionHook(
+    1,
+    limit
+  );
 
   const handlePageChange = async (data: { selected: number }) => {
     console.log(data.selected + 1);
     try {
-      const page = await getPage(data.selected + 1);
+      const { election: page } = GetPaginatedElectionHook(
+        data.selected + 1,
+        limit
+      );
       setElection(page);
     } catch (err) {
       console.log(err);
     }
   };
-
-
 
   return (
     <>
@@ -77,7 +34,6 @@ export const OfficialChooseElectionForCandidate = () => {
             <div className=" pt-4 ps-5">
               <span style={{ fontSize: "40px" }}>Choose an election</span>
             </div>
-            
           </Col>
         </Row>
 
@@ -125,7 +81,10 @@ export const OfficialChooseElectionForCandidate = () => {
               </div>
             </>
           )}
-          //TODO:put paginate
+          <Paginate
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+          />
         </Row>
       </Container>
     </>

@@ -1,85 +1,25 @@
-import { useEffect, useState } from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
-import { API } from "../../services/controller/api";
-import { Link, useNavigate } from "react-router-dom";
-import ReactPaginate from "react-paginate";
-
-type Candidate = {
-  id: string;
-  lastName: string;
-  firstName: string;
-  otherName: string;
-  email: string;
-  dateOfBirth: string;
-  course: string;
-  matricNo: string;
-  level: string;
-  registrationDate: string;
-};
-
-type Election = {
-  id: string;
-  name: string;
-  course: string;
-  level: string;
-  candidates: Candidate[];
-  // {
-  // 		id: string,
-  // 		lastName: string,
-  // 		firstName: string,
-  // 		otherName: string,
-  // 		email: string,
-  // 		dateOfBirth: string,
-  // 		course: string,
-  // 		matricNo: string,
-  // 		level: string,
-  // 		registrationDate: string;
-  // 	}
-};
+import { Link } from "react-router-dom";
+import { GetPaginatedElectionHookForVoter } from "../hooks/get-paginated-election-hook-for-voters";
+import Paginate from "../../components/Paginate";
 
 export const ChooseElectionForElection = () => {
-  const voterId = JSON.parse(window.localStorage.getItem("ID") as string);
-  const [election, setElection] = useState<null | Election[]>(null);
-  const [totalPages, setTotalPages] = useState(0);
   const limit = 4;
-
-  const getElection = async () => {
-    try {
-      const response = await API.get(
-        `elections/voter/${voterId}?page=1&limit=${limit}`
-      );
-      setElection(response.data.data);
-      setTotalPages(response.data.lastPage);
-      //setElection(response);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getPage = async (currentPage: number) => {
-    try {
-      const response = await API.get(
-        `elections/voter/${voterId}?page=${currentPage}&limit=${limit}`
-      );
-      return response.data.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { election, setElection, totalPages } =
+    GetPaginatedElectionHookForVoter(1, limit);
 
   const handlePageChange = async (data: { selected: number }) => {
     console.log(data.selected + 1);
     try {
-      const page = await getPage(data.selected + 1);
+      const { election: page } = GetPaginatedElectionHookForVoter(
+        data.selected + 1,
+        limit
+      );
       setElection(page);
     } catch (err) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    getElection();
-  }, []);
 
   return (
     <Container fluid="lg" className="h-100 ">
@@ -130,32 +70,14 @@ export const ChooseElectionForElection = () => {
             <Container className="h-100 pt-4 ps-5 pe-5">
               <Row className="border rounded bg-light h-75 align-items-center">
                 <Col className="text-center  ">
-                 <Spinner animation="border"/>
+                  <Spinner animation="border" />
                 </Col>
               </Row>
             </Container>
           </>
         )}
 
-        <ReactPaginate
-          previousLabel={"<<"}
-          nextLabel={">>"}
-          breakLabel={"..."}
-          pageCount={totalPages}
-          onPageChange={handlePageChange}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={3}
-          containerClassName={"pagination justify-content-end pb-2 mt-5"}
-          pageClassName={"page-item"}
-          pageLinkClassName={"page-link"}
-          previousClassName={"page-item"}
-          nextClassName={"page-item"}
-          previousLinkClassName={"page-link"}
-          nextLinkClassName={"page-link"}
-          activeClassName={"active"}
-          breakClassName={"page-item"}
-          breakLinkClassName={"page-link"}
-        />
+        <Paginate totalPages={totalPages} handlePageChange={handlePageChange} />
       </Row>
     </Container>
   );

@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { API } from "../../services/controller/api";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
+
+import { GetPaginatedElectionHook } from "../hooks/get-paginated-election-hook";
+import Paginate from "../../components/Paginate";
 
 type Candidate = {
   id: string;
@@ -23,50 +26,27 @@ type Election = {
   course: string;
   level: string;
   candidates: Candidate[];
-
 };
 
 export const OfficialChooseElectionForResult = () => {
-  const navigate = useNavigate();
-  const [election, setElection] = useState<null | Election[]>(null);
-  const [totalPages, setTotalPages] = useState(0);
   const limit = 4;
-
-  const getElection = async () => {
-    try {
-      const response = await API.get(`elections?page=1&limit=${limit}`);
-      setElection(response.data.data);
-      setTotalPages(response.data.lastPage);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getPage = async (currentPage: number) => {
-    try {
-      const response = await API.get(
-        `elections?page=${currentPage}&limit=${limit}`
-      );
-      console.log(response.data.data);
-      return response.data.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { election, setElection, totalPages } = GetPaginatedElectionHook(
+    1,
+    limit
+  );
 
   const handlePageChange = async (data: { selected: number }) => {
     console.log(data.selected + 1);
     try {
-      const page = await getPage(data.selected + 1);
+      const { election: page } = GetPaginatedElectionHook(
+        data.selected + 1,
+        limit
+      );
       setElection(page);
     } catch (err) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    getElection();
-  }, []);
 
   return (
     <>
@@ -123,24 +103,10 @@ export const OfficialChooseElectionForResult = () => {
               </div>
             </>
           )}
-          <ReactPaginate
-            previousLabel={"<<"}
-            nextLabel={">>"}
-            breakLabel={"..."}
-            pageCount={totalPages}
-            onPageChange={handlePageChange}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={3}
-            containerClassName={"pagination justify-content-end pb-2 mt-5"}
-            pageClassName={"page-item"}
-            pageLinkClassName={"page-link"}
-            previousClassName={"page-item"}
-            nextClassName={"page-item"}
-            previousLinkClassName={"page-link"}
-            nextLinkClassName={"page-link"}
-            activeClassName={"active"}
-            breakClassName={"page-item"}
-            breakLinkClassName={"page-link"}
+
+          <Paginate
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
           />
         </Row>
       </Container>

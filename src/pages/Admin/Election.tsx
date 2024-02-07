@@ -13,8 +13,9 @@ import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import DropdownMenu from "react-bootstrap/esm/DropdownMenu";
 import DropdownToggle from "react-bootstrap/esm/DropdownToggle";
 import ReactPaginate from "react-paginate";
+import { GetPaginatedElectionHook } from "../hooks/get-paginated-election-hook";
 
-interface Candidate  {
+interface Candidate {
   id: string;
   lastName: string;
   firstName: string;
@@ -25,7 +26,7 @@ interface Candidate  {
   matricNo: string;
   level: string;
   registrationDate: string;
-};
+}
 
 interface Electionn {
   id: string;
@@ -33,86 +34,27 @@ interface Electionn {
   course: string;
   level: string;
   candidates: Candidate[];
- 
-};
+}
 export const Election = () => {
-  const navigate = useNavigate();
-  const [election, setElection] = useState<null | Electionn[]>(null);
-  const [totalPages, setTotalPages] = useState(0);
   const limit = 4;
-  const limitForsmallScreens = 2;
-
-  const getElection = async () => {
-    try {
-      const response = await API.get(`elections?page=1&limit=${limit}`);
-      setElection(response.data.data);
-      setTotalPages(response.data.lastPage);
-    } catch (err) {
-      console.log(err);
-    }
-
-    //setElection(response);
-  };
-
-  const getElectionForSmallScreens = async () => {
-    try {
-      const response = await API.get(`elections?page=1&limit=${limitForsmallScreens}`);
-      setElection(response.data.data);
-      setTotalPages(response.data.lastPage);
-    } catch (err) {
-      console.log(err);
-    }
-
-    //setElection(response);
-  };
-
-  const getPage = async (currentPage: number) => {
-    try {
-      const response = await API.get(
-        `elections?page=${currentPage}&limit=${limit}`
-      );
-      console.log(response.data.data);
-      return response.data.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const getPageForSmallScreens = async (currentPage: number) => {
-    try {
-      const response = await API.get(
-        `elections?page=${currentPage}&limit=${limitForsmallScreens}`
-      );
-      console.log(response.data.data);
-      return response.data.data;
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const navigate = useNavigate();
+  const { election, setElection, totalPages } = GetPaginatedElectionHook(
+    1,
+    limit
+  );
 
   const handlePageChange = async (data: { selected: number }) => {
     console.log(data.selected + 1);
     try {
-      if(window.innerWidth <= 991){
-        const page = await getPageForSmallScreens(data.selected + 1);
-      setElection(page);
-      }
-      const page = await getPage(data.selected + 1);
+      const { election: page } = GetPaginatedElectionHook(
+        data.selected + 1,
+        limit
+      );
       setElection(page);
     } catch (err) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    if (window.innerWidth <= 991){
-      getElectionForSmallScreens()
-    }
-    else{
-      getElection();
-    }
-
-  }, []);
 
   return (
     <>

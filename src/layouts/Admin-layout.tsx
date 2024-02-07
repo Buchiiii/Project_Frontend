@@ -1,4 +1,4 @@
-import { ReactElement, ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import {
   Col,
   Container,
@@ -7,12 +7,9 @@ import {
   ModalFooter,
   ModalHeader,
   Nav,
-  Navbar,
-  NavItem,
   Row,
 } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
-import image from "../images/yui.jpg";
 
 type Props = {
   children: ReactNode;
@@ -38,23 +35,15 @@ export const Layout = ({ children }: Props) => {
             className="h-lg-100 h-sm-75  pt-lg-3 pt-sm-2"
             style={{
               backgroundColor: "#191970",
-              //borderTopRightRadius: "5%",
-              //borderBottomRightRadius: "5%",
             }}
           >
-            {/* <div className="mb-2 h-25 d-lg-block d-sm-none ">
-              <img
-                src={image}
-                className="image-fluid h-100 w-100 "
-                alt="Nigerian flag"
-              />
-            </div> */}
-
-            <Nav variant="pills" className="ms-2 mt-lg-5 mt-sm-3 pt-lg-5 flex-column">
+            <Nav
+              variant="pills"
+              className="ms-2 mt-lg-5 mt-sm-3 pt-lg-5 flex-column"
+            >
               <Nav.Item className="w-100 mb-4 ">
                 <NavLink
                   to="/official/dashboard"
-                  // className="text-white text-decoration-none"
                   className={({ isActive }) =>
                     isActive
                       ? "text-white nav-link active"
@@ -73,7 +62,6 @@ export const Layout = ({ children }: Props) => {
               <Nav.Item className="w-100 mb-4 ">
                 <NavLink
                   to="/official/candidate"
-                  //className="text-white text-decoration-none"
                   className={({ isActive }) =>
                     isActive
                       ? "text-white nav-link active"
@@ -91,7 +79,6 @@ export const Layout = ({ children }: Props) => {
               <Nav.Item className="w-100 mb-4 ">
                 <NavLink
                   to="/official/election"
-                  //className="text-white text-decoration-none"
                   className={({ isActive }) =>
                     isActive
                       ? "text-white nav-link active"
@@ -109,7 +96,6 @@ export const Layout = ({ children }: Props) => {
               <Nav.Item className="w-100 mb-4 ">
                 <NavLink
                   to="/official/result"
-                  // className="text-white text-decoration-none"
                   className={({ isActive }) =>
                     isActive
                       ? "text-white nav-link active"
@@ -127,7 +113,6 @@ export const Layout = ({ children }: Props) => {
               <Nav.Item className="w-100 mb-4 ">
                 <NavLink
                   to="/official/settings"
-                  // className="text-white text-decoration-none"
                   className={({ isActive }) =>
                     isActive
                       ? "text-white nav-link active"
