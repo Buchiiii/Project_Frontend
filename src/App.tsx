@@ -1,51 +1,48 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { Layout } from "./components/Layout";
-import { Login } from "./components/Login";
+import { Layout } from "./layouts/Admin-layout";
+import { VoterLogin } from "./pages/Voters/Voter-login/Voter-login";
 import { Route, Routes } from "react-router-dom";
-import { OfficialLogin } from "./components/Officials/OfficialLogin";
-import { OfficialDashboard } from "./components/Officials/OfficialDashboard";
-import { OfficialCandidate } from "./components/Officials/OfficialCandidate";
-import { Election } from "./components/Officials/Election";
-import { OfficialSettings } from "./components/Officials/OfficialSettings";
-import { Result } from "./components/Voters/Result";
-import { VoterLayout } from "./components/VoterLayout";
-import { VoterDashboard } from "./components/Voters/VotersDashboard";
-import { VoterProfile } from "./components/Voters/VotersProfile";
-import { VoterSettings } from "./components/Voters/VotersSettings";
-import { ChooseElection } from "./components/Voters/ChooseElection";
-import { Vote } from "./components/Voters/Vote";
-import { ChooseElectionForElection } from "./components/Voters/ChooseElectionForResult";
-import { Changepassword } from "./components/Voters/ChangePassword";
-import { OfficialChooseElectionForCandidate } from "./components/Officials/OfficialChooseElectionForCandidate";
-import { ELectionProperties } from "./components/Officials/ElectionProperties";
-import { CreateElection } from "./components/Officials/CreateElection";
-import { Home } from "./components/Home";
-import { VoterRegister } from "./components/Voters/VoterRegister";
-import { CandidateRegister } from "./components/Candidates/CandidateRegister";
-import { OfficialChangePassword } from "./components/Officials/OfficialsChangePassword";
-import { OfficialChooseElectionForResult } from "./components/Officials/OfficialChooseElectionForResult";
-import { OfficialResult } from "./components/Officials/OfficialResult";
-import { OTPlogin } from "./components/Voters/Otplogin";
-
-//const route= createBrowserRouter(createRoutesFromElements(<Route path='/' element={<Login/>}/>))
+import { AdminLogin } from "./pages/Admin/Admin-login/Admin-login";
+import { AdminDashboard } from "./pages/Admin/Admin-dashboard";
+import { AdminCandidateList } from "./pages/Admin/Admin-candidate-list";
+import { Election } from "./pages/Admin/Election";
+import { AdminSettings } from "./pages/Admin/Admin-settings";
+import { Result } from "./pages/Voters/Voter-result";
+import { VoterLayout } from "./layouts/Voter-layout";
+import { VoterDashboard } from "./pages/Voters/Voter-dashboard";
+import { VoterProfile } from "./pages/Voters/Voter-profile";
+import { VoterSettings } from "./pages/Voters/Voter-settings";
+import { ChooseElection } from "./pages/Voters/ChooseElection";
+import { Vote } from "./pages/Voters/Voter-vote/Vote";
+import { ChooseElectionForElection } from "./pages/Voters/ChooseElectionForResult";
+import { VoterChangepassword } from "./pages/Voters/Voter-change-password";
+import { OfficialChooseElectionForCandidate } from "./pages/Admin/OfficialChooseElectionForCandidate";
+import { ELectionProperties } from "./pages/Admin/Admin-election-properties/ElectionProperties";
+import AdminCreateElection from "./pages/Admin/Admin-create-election/Admin-create-election";
+import { LandingPage } from "./pages/Landing-page";
+import { VoterRegister } from "./pages/Voters/Voter-registration/Voter-register";
+import { CandidateRegister } from "./pages/Candidates/Candidate-register";
+import { AdminChangePassword } from "./pages/Admin/Admin-change-password";
+import { OfficialChooseElectionForResult } from "./pages/Admin/OfficialChooseElectionForResult";
+import { AdminResult } from "./pages/Admin/Admin-result";
+import { OTPlogin } from "./pages/Voters/Voter-login/Voter-otp-login";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="official" element={<OfficialLogin />} />
-        <Route path="voter" element={<Login />} />
-        <Route path= "voter/otp" element={<OTPlogin/>}/>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="official" element={<AdminLogin />} />
+        <Route path="voter" element={<VoterLogin />} />
+        <Route path="voter/otp" element={<OTPlogin />} />
         <Route path="voter/register" element={<VoterRegister />} />
         <Route path="candidate/register" element={<CandidateRegister />} />
         <Route
           path="official/dashboard"
           element={
             <Layout>
-              <OfficialDashboard />
+              <AdminDashboard />
             </Layout>
           }
         />
@@ -62,11 +59,9 @@ function App() {
           path="official/candidate/:id"
           element={
             <Layout>
-              <OfficialCandidate />
+              <AdminCandidateList />
             </Layout>
-            
           }
-          
         />
 
         <Route
@@ -91,7 +86,7 @@ function App() {
           path="official/election/create"
           element={
             <Layout>
-              <CreateElection />
+              <AdminCreateElection />
             </Layout>
           }
         />
@@ -100,7 +95,7 @@ function App() {
           path="official/settings"
           element={
             <Layout>
-              <OfficialSettings />
+              <AdminSettings />
             </Layout>
           }
         />
@@ -109,7 +104,7 @@ function App() {
           path="official/settings/changepassword"
           element={
             <Layout>
-              <OfficialChangePassword />
+              <AdminChangePassword />
             </Layout>
           }
         />
@@ -127,7 +122,7 @@ function App() {
           path="official/result/:id"
           element={
             <Layout>
-              <OfficialResult />
+              <AdminResult />
             </Layout>
           }
         />
@@ -163,7 +158,7 @@ function App() {
           path="voters/settings/changepassword"
           element={
             <VoterLayout>
-              <Changepassword />
+              <VoterChangepassword />
             </VoterLayout>
           }
         />
